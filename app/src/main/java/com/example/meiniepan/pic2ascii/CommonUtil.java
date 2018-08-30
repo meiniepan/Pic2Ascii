@@ -148,7 +148,7 @@ public class CommonUtil {
         int width0 = image.getWidth();
         int height0 = image.getHeight();
         int width1,height1;
-        int scale = 3;
+        int scale = 7;
         if (width0<= width/scale){
             width1 = width0;
             height1 = height0;
