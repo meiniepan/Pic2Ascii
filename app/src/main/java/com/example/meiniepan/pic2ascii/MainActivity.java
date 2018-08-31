@@ -27,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         imageView = findViewById(R.id.image);
+        bitmap = BitmapFactory.decodeResource(getResources(),R.mipmap.ddd);
+
     }
 
     public void doPick(View view) {
@@ -50,18 +52,15 @@ public class MainActivity extends AppCompatActivity {
                         path = localMedia.getPath();
                     }
                 }
-                 filepath = CommonUtil.amendRotatePhoto(path, MainActivity.this);
+                filepath = CommonUtil.amendRotatePhoto(path, MainActivity.this);
 //                imageView.setImageBitmap(BitmapFactory.decodeFile(filepath));
-                imageView.setImageBitmap(CommonUtil.createAsciiPic(filepath, MainActivity.this));
+                bitmap = CommonUtil.createAsciiPic(filepath, MainActivity.this);
+                imageView.setImageBitmap(bitmap);
             }
         }
     }
 
     public void doSave(View view) {
-        if (TextUtils.isEmpty(filepath)){
-            Toast.makeText(MainActivity.this,"请先生成图片",Toast.LENGTH_SHORT).show();
-            return;
-        }
-                CommonUtil.saveBitmap2file(CommonUtil.createAsciiPic(filepath, MainActivity.this),System.currentTimeMillis()+"",MainActivity.this);
+        CommonUtil.saveBitmap2file(bitmap, System.currentTimeMillis() + "", MainActivity.this);
     }
 }
