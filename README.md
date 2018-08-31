@@ -1,7 +1,7 @@
 抖音上炫代码的不少，有些真的让人叹为观止，作为一个androider，当我看到下面这段舞蹈的时候，终于忍不住了，想要通过android实现一样的效果。
 
 
-jilejingtu.gif
+ ![image](https://github.com/meiniepan/Pic2Ascii/blob/master/raw/jilejingtu.gif)
 
 这么好玩的东西，为啥就没有大佬做呢，原因可能有两个，一是真的难，二是出力不讨好，难以达到最终效果，一番尝试后，技术问题都解决了，但并没有达到电脑端美感，手机屏幕还是太小了。。
 这是电脑端的静态图
