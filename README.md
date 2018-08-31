@@ -7,17 +7,18 @@
 这是电脑端的静态图
 
 
-ASCII-微信图片_20180821140237.gif
+![image](https://github.com/meiniepan/Pic2Ascii/blob/master/raw/ASCII-微信图片_20180821140237.gif)
 
 这是手机端的
-微信图片_20180830113218.jpg
+![image](https://github.com/meiniepan/Pic2Ascii/blob/master/raw/微信图片_20180830113218.jpg)
 
 还有一个普通的头像，做成ascii图后，简直美到窒息
 
 
-ASCII-微信图片_20180817091237.png
+![image](https://github.com/meiniepan/Pic2Ascii/blob/master/raw/ASCII-微信图片_20180817091237.png)
 
-下面开始分析代码，首先根据图片像素灰度转为ascii字符，这在网上有现成的java代码，android上只需要改一点api就可以，代码如下public static Bitmap createAsciiPic(final String path, Context context) {
+下面开始分析代码，首先根据图片像素灰度转为ascii字符，这在网上有现成的java代码，android上只需要改一点api就可以，代码如下
+       public static Bitmap createAsciiPic(final String path, Context context) {
         final String base = "#8XOHLTI)i=+;:,.";// 字符串由复杂到简单
 //        final String base = "#,.0123456789:;@ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";// 字符串由复杂到简单
         StringBuilder text = new StringBuilder();
@@ -170,7 +171,5 @@ public static Bitmap rotaingImageView(int angle, Bitmap bitmap) {
         return returnBm;
     }
 
-
-这些代码都在文末的项目里。
 按说拿到ascii图后，想要把整个视频转换成ascii字符视频就很简单了。只要把视频逐帧抽成图片，图片转换后，再合成为视频播放出来，但我视频库用的不多，希望有能力的朋友可以帮助完成最后一步。
 最后，也希望朋友们能把一些有趣的想法实践到android项目中来，让搬砖之余，有更多的乐趣。
