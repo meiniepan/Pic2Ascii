@@ -18,6 +18,7 @@
 ![image](https://github.com/meiniepan/Pic2Ascii/blob/master/raw/ASCII-微信图片_20180817091237.png)
 
 下面开始分析代码，首先根据图片像素灰度转为ascii字符，这在网上有现成的java代码，android上只需要改一点api就可以，代码如下
+```
        public static Bitmap createAsciiPic(final String path, Context context) {
         final String base = "#8XOHLTI)i=+;:,.";// 字符串由复杂到简单
 //        final String base = "#,.0123456789:;@ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";// 字符串由复杂到简单
@@ -56,9 +57,9 @@
 //        return image;
     }
 
-
+```
 这样处理完得到的ascii文本，但我们需要的是ascii图片，那我们需要怎么做呢，截屏？请读者思考10秒钟，想想自己的解决方案。我这里通过TextPanit和staticLayout实现的，也可以new一个TextView，写入文本，然后把Textview的缓冲区转换为图片，但是这种staticLayout的方式更底层，更有效，代码如下
-
+```
 public static Bitmap textAsBitmap(StringBuilder text, Context context) {
 
         TextPaint textPaint = new TextPaint();
@@ -101,11 +102,11 @@ public static Bitmap textAsBitmap(StringBuilder text, Context context) {
         return bitmap;
 
     }
-
+```
 
 相对于电脑端有无边无际的txt编辑框，android里text是有字数限制的，所以原始图片如果像素过多的话就要进行尺寸压缩。而且textPaint的这个设置特别重要textPaint.setTypeface(Typeface.MONOSPACE);字体对效果的影响太大了，失之毫厘谬以千里，这是一个大坑，说多了都是时间。
 我在项目里集成了一个图片选择库，可以直接把拍的照片转化为ascii图，碰到一个问题就是拍照图片拿到后都会自动旋转90度，很是困惑，虽然找到了处理方法，但系统为啥要作旋转处理，还请知道的大神告知原因。处理代码如下
-
+```
 /**
      * 读取照片旋转角度
      *
@@ -170,6 +171,6 @@ public static Bitmap rotaingImageView(int angle, Bitmap bitmap) {
         }
         return returnBm;
     }
-
+```
 按说拿到ascii图后，想要把整个视频转换成ascii字符视频就很简单了。只要把视频逐帧抽成图片，图片转换后，再合成为视频播放出来，但我视频库用的不多，希望有能力的朋友可以帮助完成最后一步。
 最后，也希望朋友们能把一些有趣的想法实践到android项目中来，让搬砖之余，有更多的乐趣。
