@@ -61,6 +61,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void doSave(View view) {
-        CommonUtil.saveBitmap2file(bitmap, System.currentTimeMillis() + "", MainActivity.this);
+        CommonUtil.saveBitmap2file(bitmap, MainActivity.this);
     }
 }

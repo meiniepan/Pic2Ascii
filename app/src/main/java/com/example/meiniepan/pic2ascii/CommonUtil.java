@@ -90,16 +90,16 @@ public class CommonUtil {
     }
 
     private static final String SD_PATH = Environment.getExternalStorageDirectory().getPath() + "/meiniepan/";
-    private static final String IN_PATH = Environment.getExternalStorageDirectory().getPath() + "/meiniepan/";
 
-    public static String saveBitmap2file(Bitmap bmp, String desFileName, Context context) {
+    public static void saveBitmap2file(Bitmap bmp,Context context) {
         String savePath;
         File filePic;
         if (Environment.getExternalStorageState().equals(
                 Environment.MEDIA_MOUNTED)) {
             savePath = SD_PATH;
         } else {
-            savePath = IN_PATH;
+            Toast.makeText(context, "保存失败！", Toast.LENGTH_SHORT).show();
+            return ;
         }
         try {
             filePic = new File(savePath + generateFileName() + ".JPEG");
@@ -115,10 +115,7 @@ public class CommonUtil {
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            return null;
         }
-
-        return filePic.getAbsolutePath();
     }
 
     public static File getFileDir(Context context, String desFileName) {
