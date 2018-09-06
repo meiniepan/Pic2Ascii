@@ -2,18 +2,15 @@ package com.example.meiniepan.pic2ascii;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.media.ExifInterface;
-import android.media.MediaMetadataRetriever;
-import android.net.Uri;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
@@ -25,22 +22,17 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.example.meiniepan.pic2ascii.gifmaker.AnimatedGifEncoder;
+
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
-import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
-import java.io.ByteArrayOutputStream;
+
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -49,67 +41,62 @@ import java.util.UUID;
  */
 
 public class CommonUtil {
-
-    private static final long one_frame_time = 1000000;
-
     public static void choosePhoto(Activity context, int requestCode) {
         PictureSelector.create(context)
-            .openGallery(PictureMimeType.ofAll())//全部.PictureMimeType.ofAll()、图片.ofImage()、视频.ofVideo()、音频.ofAudio()
+                .openGallery(PictureMimeType.ofImage())//全部.PictureMimeType.ofAll()、图片.ofImage()、视频.ofVideo()、音频.ofAudio()
 //                .theme()//主题样式(不设置为默认样式) 也可参考demo values/styles下 例如：R.style.picture.white.style
-            .maxSelectNum(1)// 最大图片选择数量 int
+                .maxSelectNum(1)// 最大图片选择数量 int
 //                .minSelectNum()// 最小选择数量 int
-            .imageSpanCount(4)// 每行显示个数 int
-            .selectionMode(PictureConfig.SINGLE)// 多选 or 单选 PictureConfig.MULTIPLE or PictureConfig.SINGLE
+                .imageSpanCount(4)// 每行显示个数 int
+                .selectionMode(PictureConfig.SINGLE)// 多选 or 单选 PictureConfig.MULTIPLE or PictureConfig.SINGLE
 //                .previewImage()// 是否可预览图片 true or false
 //                .previewVideo()// 是否可预览视频 true or false
 //                .enablePreviewAudio() // 是否可播放音频 true or false
-            .isCamera(true)// 是否显示拍照按钮 true or false
+                .isCamera(true)// 是否显示拍照按钮 true or false
 //                .imageFormat(PictureMimeType.PNG)// 拍照保存图片格式后缀,默认jpeg
-            .isZoomAnim(true)// 图片列表点击 缩放效果 默认true
-            .sizeMultiplier(0.5f)// glide 加载图片大小 0~1之间 如设置 .glideOverride()无效
-            .setOutputCameraPath("/CustomPath")// 自定义拍照保存路径,可不填
-            .enableCrop(false)// 是否裁剪 true or false
-            .compress(false)// 是否压缩 true or false
+                .isZoomAnim(true)// 图片列表点击 缩放效果 默认true
+                .sizeMultiplier(0.5f)// glide 加载图片大小 0~1之间 如设置 .glideOverride()无效
+                .setOutputCameraPath("/CustomPath")// 自定义拍照保存路径,可不填
+                .enableCrop(false)// 是否裁剪 true or false
+                .compress(false)// 是否压缩 true or false
 //                .glideOverride()// int glide 加载宽高，越小图片列表越流畅，但会影响列表图片浏览的清晰度
-            .withAspectRatio(1, 1)// int 裁剪比例 如16:9 3:2 3:4 1:1 可自定义
+                .withAspectRatio(1, 1)// int 裁剪比例 如16:9 3:2 3:4 1:1 可自定义
 //                .hideBottomControls()// 是否显示uCrop工具栏，默认不显示 true or false
 //                .isGif()// 是否显示gif图片 true or false
-            .compressSavePath(context.getFilesDir().getAbsolutePath())//压缩图片保存地址
-            .freeStyleCropEnabled(false)// 裁剪框是否可拖拽 true or false
-            .circleDimmedLayer(true)// 是否圆形裁剪 true or false
-            .showCropFrame(false)// 是否显示裁剪矩形边框 圆形裁剪时建议设为false   true or false
-            .showCropGrid(false)// 是否显示裁剪矩形网格 圆形裁剪时建议设为false    true or false
-            .openClickSound(false)// 是否开启点击声音 true or false
+                .compressSavePath(context.getFilesDir().getAbsolutePath())//压缩图片保存地址
+                .freeStyleCropEnabled(false)// 裁剪框是否可拖拽 true or false
+                .circleDimmedLayer(true)// 是否圆形裁剪 true or false
+                .showCropFrame(false)// 是否显示裁剪矩形边框 圆形裁剪时建议设为false   true or false
+                .showCropGrid(false)// 是否显示裁剪矩形网格 圆形裁剪时建议设为false    true or false
+                .openClickSound(false)// 是否开启点击声音 true or false
 //                .selectionMedia()// 是否传入已选图片 List<LocalMedia> list
 //                .previewEggs()// 预览图片时 是否增强左右滑动图片体验(图片滑动一半即可看到上一张是否选中) true or false
-            .cropCompressQuality(50)// 裁剪压缩质量 默认90 int
-            .minimumCompressSize(50)// 小于100kb的图片不压缩
+                .cropCompressQuality(50)// 裁剪压缩质量 默认90 int
+                .minimumCompressSize(50)// 小于100kb的图片不压缩
 //                .synOrAsy(true)//同步true或异步false 压缩 默认同步
 //                .cropWH()// 裁剪宽高比，设置如果大于图片本身宽高则无效 int
 //                .rotateEnabled() // 裁剪是否可旋转图片 true or false
-            .scaleEnabled(true)// 裁剪是否可放大缩小图片 true or false
+                .scaleEnabled(true)// 裁剪是否可放大缩小图片 true or false
 //                .videoQuality()// 视频录制质量 0 or 1 int
 //                .videoMaxSecond(15)// 显示多少秒以内的视频or音频也可适用 int
 //                .videoMinSecond(10)// 显示多少秒以内的视频or音频也可适用 int
 //                .recordVideoSecond()//视频秒数录制 默认60s int
-            .isDragFrame(false)// 是否可拖动裁剪框(固定)
-            .forResult(requestCode);//结果回调onActivityResult code
+                .isDragFrame(false)// 是否可拖动裁剪框(固定)
+                .forResult(requestCode);//结果回调onActivityResult code
     }
 
     private static String generateFileName() {
         return UUID.randomUUID().toString();
     }
 
-    private static final String SD_PATH =
-        Environment.getExternalStorageDirectory().getPath() + "/meiniepan/";
-    private static final String IN_PATH =
-        Environment.getExternalStorageDirectory().getPath() + "/meiniepan/";
+    private static final String SD_PATH = Environment.getExternalStorageDirectory().getPath() + "/meiniepan/";
+    private static final String IN_PATH = Environment.getExternalStorageDirectory().getPath() + "/meiniepan/";
 
     public static String saveBitmap2file(Bitmap bmp, String desFileName, Context context) {
         String savePath;
         File filePic;
         if (Environment.getExternalStorageState().equals(
-            Environment.MEDIA_MOUNTED)) {
+                Environment.MEDIA_MOUNTED)) {
             savePath = SD_PATH;
         } else {
             savePath = IN_PATH;
@@ -124,8 +111,7 @@ public class CommonUtil {
             bmp.compress(Bitmap.CompressFormat.JPEG, 100, fos);
             fos.flush();
             fos.close();
-            Toast.makeText(context, "保存成功,位置:" + filePic.getAbsolutePath(), Toast.LENGTH_SHORT)
-                .show();
+            Toast.makeText(context, "保存成功,位置:" + filePic.getAbsolutePath(), Toast.LENGTH_SHORT).show();
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -137,8 +123,7 @@ public class CommonUtil {
 
     public static File getFileDir(Context context, String desFileName) {
         try {
-            File dir = new File(
-                Environment.getExternalStorageDirectory().toString() + "/carefree/");
+            File dir = new File(Environment.getExternalStorageDirectory().toString() + "/carefree/");
             if (!dir.exists()) {
                 dir.createNewFile();
             }
@@ -150,11 +135,7 @@ public class CommonUtil {
 
     }
 
-    public static Bitmap createAsciiPic(String path, Context context) {
-        return createAsciiPic(BitmapFactory.decodeFile(path), context);
-    }
-
-    public static Bitmap createAsciiPic(Bitmap image, Context context) {
+    public static Bitmap createAsciiPic(final String path, Context context) {
         final String base = "#8XOHLTI)i=+;:,.";// 字符串由复杂到简单
 //        final String base = "#,.0123456789:;@ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";// 字符串由复杂到简单
         StringBuilder text = new StringBuilder();
@@ -163,6 +144,7 @@ public class CommonUtil {
         wm.getDefaultDisplay().getMetrics(dm);
         int width = dm.widthPixels;
         int height = dm.heightPixels;
+        Bitmap image = BitmapFactory.decodeFile(path);  //读取图片
         int width0 = image.getWidth();
         int height0 = image.getHeight();
         int width1, height1;
@@ -174,7 +156,7 @@ public class CommonUtil {
             width1 = width / scale;
             height1 = width1 * height0 / width0;
         }
-        image = scale(image, width1, height1);  //读取图片
+        image = scale(path, width1, height1);  //读取图片
         //输出到指定文件中
         for (int y = 0; y < image.getHeight(); y += 2) {
             for (int x = 0; x < image.getWidth(); x++) {
@@ -197,8 +179,8 @@ public class CommonUtil {
 
         TextView tv = new TextView(context);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT);
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
         tv.setLayoutParams(layoutParams);
         tv.setText(contents);
         tv.setTextSize(scale * 2);
@@ -207,8 +189,9 @@ public class CommonUtil {
         tv.setDrawingCacheEnabled(true);
         tv.setTextColor(Color.GRAY);
         tv.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
-            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
         tv.layout(0, 0, tv.getMeasuredWidth(), tv.getMeasuredHeight());
+
 
         tv.setBackgroundColor(Color.WHITE);
 
@@ -236,11 +219,11 @@ public class CommonUtil {
 
         StaticLayout layout = new StaticLayout(text, textPaint, width,
 
-            Layout.Alignment.ALIGN_CENTER, 1f, 0.0f, true);
+                Layout.Alignment.ALIGN_CENTER, 1f, 0.0f, true);
 
         Bitmap bitmap = Bitmap.createBitmap(layout.getWidth() + 20,
 
-            layout.getHeight() + 20, Bitmap.Config.ARGB_8888);
+                layout.getHeight() + 20, Bitmap.Config.ARGB_8888);
 
         Canvas canvas = new Canvas(bitmap);
 
@@ -252,21 +235,12 @@ public class CommonUtil {
 
         layout.draw(canvas);
 
-        Log.d("textAsBitmap",
-
-            String.format("1:%d %d", layout.getWidth(), layout.getHeight()));
-
         return bitmap;
 
     }
 
     public static Bitmap scale(String src, int newWidth, int newHeight) {
-        return scale(BitmapFactory.decodeFile(src), newWidth, newHeight);
-    }
-
-    public static Bitmap scale(Bitmap src, int newWidth, int newHeight) {
-        Bitmap ret = Bitmap
-            .createScaledBitmap(src, newWidth, newHeight, true);
+        Bitmap ret = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(src), newWidth, newHeight, true);
         return ret;
     }
 
@@ -293,7 +267,7 @@ public class CommonUtil {
     private static String getPhoneRootPath(Context context) {
         // 是否有SD卡
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)
-            || !Environment.isExternalStorageRemovable()) {
+                || !Environment.isExternalStorageRemovable()) {
             // 获取SD卡根目录
             return context.getExternalCacheDir().getPath();
         } else {
@@ -373,7 +347,7 @@ public class CommonUtil {
      * 处理旋转后的图片
      *
      * @param originpath 原图路径
-     * @param context 上下文
+     * @param context    上下文
      * @return 返回修复完毕后的图片路径
      */
     public static String amendRotatePhoto(String originpath, Context context) {
@@ -402,8 +376,7 @@ public class CommonUtil {
         int degree = 0;
         try {
             ExifInterface exifInterface = new ExifInterface(path);
-            int orientation = exifInterface
-                .getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+            int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
             switch (orientation) {
                 case ExifInterface.ORIENTATION_ROTATE_90:
                     degree = 90;
@@ -424,7 +397,7 @@ public class CommonUtil {
     /**
      * 旋转图片
      *
-     * @param angle 被旋转角度
+     * @param angle  被旋转角度
      * @param bitmap 图片对象
      * @return 旋转后的图片
      */
@@ -435,8 +408,7 @@ public class CommonUtil {
         matrix.postRotate(angle);
         try {
             // 将原始图片按照旋转矩阵进行旋转，并得到新的图片
-            returnBm = Bitmap
-                .createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+            returnBm = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
         } catch (OutOfMemoryError e) {
         }
         if (returnBm == null) {
@@ -466,120 +438,5 @@ public class CommonUtil {
             options.inJustDecodeBounds = false;
         }
         return BitmapFactory.decodeFile(path, options);// 主要通过option里的inSampleSize对原图片进行按比例压缩
-    }
-
-    /**
-     * 使用Bitmap加Matrix来缩放
-     */
-    public static Bitmap resizeImage(Bitmap bitmap, int w, int h) {
-        Bitmap BitmapOrg = bitmap;
-        int width = BitmapOrg.getWidth();
-        int height = BitmapOrg.getHeight();
-        int newWidth = w;
-        int newHeight = h;
-
-        float scaleWidth = ((float) newWidth) / width;
-        float scaleHeight = ((float) newHeight) / height;
-
-        Matrix matrix = new Matrix();
-        matrix.postScale(scaleWidth, scaleHeight);
-        // if you want to rotate the Bitmap
-        // matrix.postRotate(45);
-        Bitmap resizedBitmap = Bitmap.createBitmap(BitmapOrg, 0, 0, width,
-            height, matrix, true);
-        return resizedBitmap;
-    }
-
-    /**
-     * 获取视频的所有帧图片
-     */
-    public static Observable<ArrayList<Bitmap>> backgroundShootVideoThumb(final Context context,
-        final String path) {
-
-        return Observable.create(new ObservableOnSubscribe<ArrayList<Bitmap>>() {
-            @Override
-            public void subscribe(ObservableEmitter<ArrayList<Bitmap>> emitter) {
-                ArrayList<Bitmap> thumbnailList = new ArrayList<>();
-                try {
-                    MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever();
-                    mediaMetadataRetriever.setDataSource(path);
-                    // Retrieve media data use microsecond
-                    long videoLengthInMs = Long.parseLong(mediaMetadataRetriever
-                        .extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)) * 1000;
-                    long numThumbs =
-                        videoLengthInMs < one_frame_time ? 1 : (videoLengthInMs / one_frame_time);
-                    final long interval = videoLengthInMs / numThumbs;
-
-                    for (long i = 0; i < numThumbs; ++i) {
-                        Bitmap bitmap = mediaMetadataRetriever.getFrameAtTime(i * interval,
-                            MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
-                        //缓存到SD卡
-//                        thumbnailList.add(savePhotoToSD(bitmap, context));
-                        thumbnailList.add(bitmap);
-                    }
-                    emitter.onNext(thumbnailList);
-                    mediaMetadataRetriever.release();
-                } catch (final Throwable e) {
-                    e.printStackTrace();
-                    emitter.onError(e);
-                }
-                emitter.onComplete();
-            }
-        });
-    }
-
-    public static String createGif(Context context, String fileName, List<Bitmap> paths, int fps)
-        throws IOException {
-        return createGif(context, fileName, paths, fps, 0, 0);
-    }
-
-    /**
-     * 多张图片合成gif图
-     */
-    public static String createGif(Context context, String filename, List<Bitmap> paths, int fps,
-        int width,
-        int height) throws IOException {
-
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        AnimatedGifEncoder localAnimatedGifEncoder = new AnimatedGifEncoder();
-        localAnimatedGifEncoder.start(baos);//start
-        localAnimatedGifEncoder.setRepeat(0);//设置生成gif的开始播放时间。0为立即开始播放
-        localAnimatedGifEncoder.setDelay(fps); //图片之间间隔时间
-        if (paths.size() > 0) {
-            for (int i = 0; i < paths.size(); i++) {
-//                Bitmap bitmap = BitmapFactory.decodeFile(paths.get(i));
-                Bitmap resizeBm = paths.get(i);
-                if (width != 0 && height != 0) {
-                    //缩放图片大小
-                    resizeBm = resizeImage(paths.get(i), width, height);
-                }
-                localAnimatedGifEncoder.addFrame(resizeBm);
-            }
-        }
-        localAnimatedGifEncoder.finish();//finish
-
-        File file = new File(SD_PATH);
-        if (!file.exists())
-            file.mkdir();
-        String path = SD_PATH + filename + ".gif";
-        FileOutputStream fos = new FileOutputStream(path);
-        baos.writeTo(fos);
-        baos.flush();
-        fos.flush();
-        baos.close();
-        fos.close();
-
-        //把文件插入到系统图库
-        try {
-            MediaStore.Images.Media.insertImage(context.getContentResolver(),
-                new File(path).getAbsolutePath(), filename, null);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        //通知图库更新
-        context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
-            Uri.fromFile(new File(path))));
-
-        return path;
     }
 }
