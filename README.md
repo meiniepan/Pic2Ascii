@@ -1,3 +1,5 @@
+app体验链接
+ https://github.com/meiniepan/Pic2Ascii/blob/master/raw/pic2ascii.apk
 抖音上炫代码的不少，有些真的让人叹为观止，作为一个androider，当我看到下面这段舞蹈的时候，终于忍不住了，想要通过android实现一样的效果。
 
 
