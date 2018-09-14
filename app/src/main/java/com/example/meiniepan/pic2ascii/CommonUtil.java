@@ -2,6 +2,7 @@ package com.example.meiniepan.pic2ascii;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -10,7 +11,9 @@ import android.graphics.Matrix;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.media.ExifInterface;
+import android.net.Uri;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
@@ -28,6 +31,7 @@ import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -93,7 +97,7 @@ public class CommonUtil {
 
     public static void saveBitmap2file(Bitmap bmp,Context context) {
         String savePath;
-        File filePic;
+        String fileName = generateFileName() + ".JPEG";
         if (Environment.getExternalStorageState().equals(
                 Environment.MEDIA_MOUNTED)) {
             savePath = SD_PATH;
@@ -101,8 +105,8 @@ public class CommonUtil {
             Toast.makeText(context, "保存失败！", Toast.LENGTH_SHORT).show();
             return ;
         }
+        File filePic = new File(savePath + fileName);
         try {
-            filePic = new File(savePath + generateFileName() + ".JPEG");
             if (!filePic.exists()) {
                 filePic.getParentFile().mkdirs();
                 filePic.createNewFile();
@@ -116,6 +120,16 @@ public class CommonUtil {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        // 其次把文件插入到系统图库
+        try {
+            MediaStore.Images.Media.insertImage(context.getContentResolver(),
+                    filePic.getAbsolutePath(), fileName, null);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        // 最后通知图库更新
+        context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + savePath+fileName)));
+
     }
 
     public static File getFileDir(Context context, String desFileName) {
