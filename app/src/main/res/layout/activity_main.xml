@@ -5,15 +5,29 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.example.meiniepan.pic2ascii.MainActivity">
-
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
     <Button
         android:id="@+id/btn_pick"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
+        android:layout_weight="1"
         android:layout_height="50dp"
         android:background="@color/colorPrimary"
         android:onClick="doPick"
-        android:text="选择图片"
+        android:text="选择图片(生成黑白)"
         android:textColor="@android:color/white" />
+    <Button
+        android:id="@+id/btn_pick2"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="50dp"
+        android:background="@android:color/holo_orange_dark"
+        android:onClick="doPick2"
+        android:text="选择图片(彩色)"
+        android:textColor="@android:color/white" />
+</LinearLayout>
+
     <Button
         android:id="@+id/btn_save"
         android:layout_width="match_parent"

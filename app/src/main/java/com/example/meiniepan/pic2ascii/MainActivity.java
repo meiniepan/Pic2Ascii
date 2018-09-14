@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
     ImageView imageView;
     private Bitmap bitmap;
     private String filepath;
+    private int CHOOSE_REQUEST_COLOR = 500;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +34,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void doPick(View view) {
         CommonUtil.choosePhoto(this, PictureConfig.CHOOSE_REQUEST);
+    }
+
+    public void doPick2(View view) {
+        CommonUtil.choosePhoto(this, CHOOSE_REQUEST_COLOR);
     }
 
     @Override
@@ -55,6 +60,23 @@ public class MainActivity extends AppCompatActivity {
                 filepath = CommonUtil.amendRotatePhoto(path, MainActivity.this);
 //                imageView.setImageBitmap(BitmapFactory.decodeFile(filepath));
                 bitmap = CommonUtil.createAsciiPic(filepath, MainActivity.this);
+                imageView.setImageBitmap(bitmap);
+            }else if (requestCode == CHOOSE_REQUEST_COLOR) {
+                List<LocalMedia> selectList = PictureSelector.obtainMultipleResult(data);
+                String path = "";
+                if (selectList != null && selectList.size() > 0) {
+                    LocalMedia localMedia = selectList.get(0);
+                    if (localMedia.isCompressed()) {
+                        path = localMedia.getCompressPath();
+                    } else if (localMedia.isCut()) {
+                        path = localMedia.getCutPath();
+                    } else {
+                        path = localMedia.getPath();
+                    }
+                }
+                filepath = CommonUtil.amendRotatePhoto(path, MainActivity.this);
+//                imageView.setImageBitmap(BitmapFactory.decodeFile(filepath));
+                bitmap = CommonUtil.createAsciiPicColor(filepath, MainActivity.this);
                 imageView.setImageBitmap(bitmap);
             }
         }
