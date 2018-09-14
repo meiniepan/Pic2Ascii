@@ -8,17 +8,19 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
-import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.Layout;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.text.StaticLayout;
 import android.text.TextPaint;
+import android.text.style.ForegroundColorSpan;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -34,9 +36,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -150,6 +153,7 @@ public class CommonUtil {
         final String base = "#8XOHLTI)i=+;:,.";// 字符串由复杂到简单
 //        final String base = "#,.0123456789:;@ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";// 字符串由复杂到简单
         StringBuilder text = new StringBuilder();
+        List<Integer> colors = new ArrayList<>();
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics dm = new DisplayMetrics();
         wm.getDefaultDisplay().getMetrics(dm);
@@ -176,15 +180,18 @@ public class CommonUtil {
                 final float gray = 0.299f * r + 0.578f * g + 0.114f * b;
                 final int index = Math.round(gray * (base.length() + 1) / 255);
                 String s = index >= base.length() ? " " : String.valueOf(base.charAt(index));
+                colors.add(pixel) ;
                 text.append(s);
             }
             text.append("\n");
+            colors.add(0) ;
         }
-        return textAsBitmap(text, context);
+        return textAsBitmap(text,colors, context);
+//        return creatCodeBitmap(text,context,colors);
 //        return image;
     }
 
-    public static Bitmap creatCodeBitmap(StringBuilder contents, Context context) {
+    public static Bitmap creatCodeBitmap(StringBuilder contents, Context context, List<Integer> colors) {
 //        contents = new StringBuilder().append("")
         float scale = context.getResources().getDisplayMetrics().scaledDensity;
 
@@ -193,12 +200,17 @@ public class CommonUtil {
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT);
         tv.setLayoutParams(layoutParams);
-        tv.setText(contents);
+        SpannableStringBuilder spannableString = new SpannableStringBuilder(contents);
+        ForegroundColorSpan colorSpan;
+        for (int i = 0; i <colors.size() ; i++) {
+            colorSpan = new ForegroundColorSpan(colors.get(i));
+            spannableString.setSpan(colorSpan, i, i+1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        tv.setText(spannableString);
         tv.setTextSize(scale * 2);
         tv.setTypeface(Typeface.MONOSPACE);
         tv.setGravity(Gravity.CENTER_HORIZONTAL);
         tv.setDrawingCacheEnabled(true);
-        tv.setTextColor(Color.GRAY);
         tv.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
                 View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
         tv.layout(0, 0, tv.getMeasuredWidth(), tv.getMeasuredHeight());
@@ -211,24 +223,23 @@ public class CommonUtil {
         return bitmapCode;
     }
 
-    public static Bitmap textAsBitmap(StringBuilder text, Context context) {
-
+    public static Bitmap textAsBitmap(StringBuilder text, List<Integer> colors, Context context) {
         TextPaint textPaint = new TextPaint();
-
-// textPaint.setARGB(0x31, 0x31, 0x31, 0);
-
-        textPaint.setColor(Color.BLACK);
-
+        textPaint.setColor(Color.TRANSPARENT);
         textPaint.setAntiAlias(true);
         textPaint.setTypeface(Typeface.MONOSPACE);
-
         textPaint.setTextSize(12);
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics dm = new DisplayMetrics();
         wm.getDefaultDisplay().getMetrics(dm);
         int width = dm.widthPixels;         //
-
-        StaticLayout layout = new StaticLayout(text, textPaint, width,
+        SpannableStringBuilder spannableString = new SpannableStringBuilder(text);
+        ForegroundColorSpan colorSpan;
+        for (int i = 0; i <colors.size() ; i++) {
+            colorSpan = new ForegroundColorSpan(colors.get(i));
+            spannableString.setSpan(colorSpan, i, i+1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        StaticLayout layout = new StaticLayout(spannableString, textPaint, width,
 
                 Layout.Alignment.ALIGN_CENTER, 1f, 0.0f, true);
 
@@ -365,7 +376,6 @@ public class CommonUtil {
 
         // 取得图片旋转角度
         int angle = readPictureDegree(originpath);
-
         // 把原图压缩后得到Bitmap对象
         if (angle != 0) {
             Bitmap bmp = getCompressPhoto(originpath);
