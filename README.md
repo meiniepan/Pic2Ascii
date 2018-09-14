@@ -4,7 +4,7 @@
  ![image](https://github.com/meiniepan/Pic2Ascii/blob/master/raw/z2IN.png)
  
  
- 本项目生成字符图片只是黑白的，文中的彩色图片为电脑端的效果
+ 本项目已经支持彩色模式
  
  
 抖音上炫代码的不少，有些真的让人叹为观止，作为一个androider，当我看到下面这段舞蹈的时候，终于忍不住了，想要通过android实现一样的效果。
