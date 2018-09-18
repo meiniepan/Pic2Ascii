@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Pic2Ascii.iml" filepath="$PROJECT_DIR$/Pic2Ascii.iml" />
-      <module fileurl="file://D:\codeDownLoad\Pic2Ascii\.idea\Pic2Ascii.iml" filepath="D:\codeDownLoad\Pic2Ascii\.idea\Pic2Ascii.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
