@@ -21,10 +21,6 @@
 这是手机端的
 ![image](https://github.com/meiniepan/Pic2Ascii/blob/master/raw/微信图片_20180830113218.jpg)
 
-还有一个普通的头像，做成ascii图后，简直美到窒息
-
-
-![image](https://github.com/meiniepan/Pic2Ascii/blob/master/raw/ASCII-微信图片_20180817091237.png)
 
 下面开始分析代码，首先根据图片像素灰度转为ascii字符，这在网上有现成的java代码，android上只需要改一点api就可以，代码如下
 ```
