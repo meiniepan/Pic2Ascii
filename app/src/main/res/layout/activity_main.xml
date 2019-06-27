@@ -36,11 +36,27 @@
         android:onClick="doSave"
         android:text="保存图片到本地"
         android:textColor="@android:color/white" />
-
+<FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
     <ImageView
         android:id="@+id/image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@mipmap/ddd"
         android:scaleType="fitCenter" />
+    <TextView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:text="赏"
+        android:textColor="@color/blue"
+        android:gravity="center"
+        android:textSize="25sp"
+        android:onClick="doReward"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/bac_small_cricle"
+        />
+</FrameLayout>
 </LinearLayout>

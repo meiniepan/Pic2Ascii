@@ -1,5 +1,6 @@
 package com.example.meiniepan.pic2ascii;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -52,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
         CommonUtil.choosePhoto(this, CHOOSE_REQUEST_COLOR);
     }
 
+    @SuppressLint("CheckResult")
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -88,14 +90,10 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 LoadingDialog.getInstance().show(MainActivity.this,"处理中", false);
-                Observable.fromCallable(new Callable<Bitmap>() {
-                    @Override
-                    public Bitmap call() throws Exception {
-                        filepath = CommonUtil.amendRotatePhoto(path, MainActivity.this);
-//                imageView.setImageBitmap(BitmapFactory.decodeFile(filepath));
-                        bitmap = CommonUtil.createAsciiPicColor(filepath, MainActivity.this);
-                        return bitmap;
-                    }
+                Observable.fromCallable(() -> {
+                    filepath = CommonUtil.amendRotatePhoto(path, MainActivity.this);
+                    bitmap = CommonUtil.createAsciiPicColor(filepath, MainActivity.this);
+                    return bitmap;
                 }).compose(switchSchedulers()).subscribeWith(new DisposableObserver<Bitmap>() {
 
                     @Override
@@ -125,5 +123,10 @@ public class MainActivity extends AppCompatActivity {
     public static <T> ObservableTransformer<T, T> switchSchedulers() {
         return upstream -> upstream.subscribeOn(Schedulers.io()).unsubscribeOn(Schedulers.io()).doOnSubscribe(disposable -> {
         }).subscribeOn(AndroidSchedulers.mainThread()).observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public void doReward(View view) {
+        bitmap =  BitmapFactory.decodeResource(getResources(),R.drawable.reward);
+        imageView.setImageBitmap(bitmap);
     }
 }
