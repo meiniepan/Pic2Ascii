@@ -43,20 +43,19 @@
         android:id="@+id/image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@mipmap/ddd"
+        android:src="@mipmap/yue"
         android:scaleType="fitCenter" />
     <TextView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:text="赏"
-        android:textColor="@color/blue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="For 悦儿"
+        android:textColor="#ffff00"
+        android:textStyle="italic|bold"
         android:gravity="center"
         android:textSize="25sp"
-        android:onClick="doReward"
         android:layout_gravity="bottom|end"
         android:layout_marginBottom="20dp"
         android:layout_marginEnd="20dp"
-        android:background="@drawable/bac_small_cricle"
         />
 </FrameLayout>
 </LinearLayout>

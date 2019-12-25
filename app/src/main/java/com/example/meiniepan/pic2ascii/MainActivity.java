@@ -1,14 +1,12 @@
 package com.example.meiniepan.pic2ascii;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.provider.MediaStore;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.TextUtils;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -17,15 +15,13 @@ import com.gs.buluo.common.widget.LoadingDialog;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.entity.LocalMedia;
-import com.luck.picture.lib.tools.Constant;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import java.util.List;
-import java.util.concurrent.Callable;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableTransformer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Action;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
@@ -41,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         imageView = findViewById(R.id.image);
-        bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ddd);
+        bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.yue);
 
     }
 
@@ -116,8 +112,20 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("CheckResult")
     public void doSave(View view) {
-        CommonUtil.saveBitmap2file(bitmap, MainActivity.this);
+        final RxPermissions rxPermissions = new RxPermissions(this);
+        rxPermissions
+                .request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .subscribe(granted -> {
+                    if (granted) { // Always true pre-M
+                        CommonUtil.saveBitmap2file(bitmap, MainActivity.this);
+                    } else {
+                        // Oups permission denied
+                        Toast.makeText(this,"未打开存储权限",Toast.LENGTH_SHORT).show();
+                    }
+                });
+
     }
 
     public static <T> ObservableTransformer<T, T> switchSchedulers() {
