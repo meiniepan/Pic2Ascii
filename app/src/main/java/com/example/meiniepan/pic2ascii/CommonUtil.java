@@ -42,6 +42,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * Created by Solang on 2018/8/21.
@@ -96,10 +98,11 @@ public class CommonUtil {
         return UUID.randomUUID().toString();
     }
 
-    private static final String SD_PATH = Environment.getExternalStorageDirectory().getPath() + "/meiniepan/";
+    private static final String SD_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator;
 
     public static void saveBitmap2file(Bitmap bmp,Context context) {
         String savePath;
+        int a;
         String fileName = generateFileName() + ".JPEG";
         if (Environment.getExternalStorageState().equals(
                 Environment.MEDIA_MOUNTED)) {
@@ -151,11 +154,12 @@ public class CommonUtil {
 
     public static Bitmap createAsciiPic(final String path, Context context) {
         final String base = "#8XOHLTI)i=+;:,.";// 字符串由复杂到简单
-//        final String base = "#,.0123456789:;@ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";// 字符串由复杂到简单
+//        final String   base = "OUYXcnxr;:,.";// 字符串由复杂到简单
         StringBuilder text = new StringBuilder();
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics dm = new DisplayMetrics();
         wm.getDefaultDisplay().getMetrics(dm);
+//        int width = dm.widthPixels;
         int width = dm.widthPixels;
         int height = dm.heightPixels;
         Bitmap image = BitmapFactory.decodeFile(path);  //读取图片
@@ -272,10 +276,11 @@ public class CommonUtil {
         DisplayMetrics dm = new DisplayMetrics();
         wm.getDefaultDisplay().getMetrics(dm);
         int width = dm.widthPixels;         //
+//        int width = 1080;         //
 
         StaticLayout layout = new StaticLayout(text, textPaint, width,
 
-                Layout.Alignment.ALIGN_CENTER, 1f, 0.0f, true);
+                Layout.Alignment.ALIGN_CENTER, 1f, 0f, true);
 
         Bitmap bitmap = Bitmap.createBitmap(layout.getWidth() + 20,
 

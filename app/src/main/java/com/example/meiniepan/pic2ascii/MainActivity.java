@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         imageView = findViewById(R.id.image);
-        bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.yue);
+        bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.aaa);
 
     }
 
@@ -136,5 +136,22 @@ public class MainActivity extends AppCompatActivity {
     public void doReward(View view) {
         bitmap =  BitmapFactory.decodeResource(getResources(),R.drawable.reward);
         imageView.setImageBitmap(bitmap);
+    }
+
+    public void initPermission() {
+        final RxPermissions rxPermissions = new RxPermissions(this);
+        rxPermissions
+                .requestEach(Manifest.permission.CAMERA,
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .subscribe(permission -> { // will emit 2 Permission objects
+                    if (permission.granted) {
+                        // `permission.name` is granted !
+                    } else if (permission.shouldShowRequestPermissionRationale) {
+                        finish();
+                    } else {
+                        finish();
+                    }
+                });
     }
 }

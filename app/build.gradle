@@ -5,15 +5,15 @@ android {
         release {
             keyAlias 'key1'
             keyPassword '123456'
-            storeFile file('F:\\Pic2Ascii\\app\\pis2asc.jks')
+            storeFile file('pis2asc.jks')
             storePassword '123456'
         }
     }
-    compileSdkVersion 28
+    compileSdkVersion 29
     defaultConfig {
         applicationId "com.example.meiniepan.pic2ascii"
         minSdkVersion 17
-        targetSdkVersion 28
+        targetSdkVersion 29
         versionCode 3
         versionName "2.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"

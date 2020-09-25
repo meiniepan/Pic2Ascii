@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/Pic2Ascii.iml" filepath="$PROJECT_DIR$/.idea/Pic2Ascii.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Pic2Ascii.iml" filepath="$PROJECT_DIR$/.idea/Pic2Ascii.iml" group="Pic2Ascii" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="Pic2Ascii/app" />
     </modules>
   </component>
 </project>
