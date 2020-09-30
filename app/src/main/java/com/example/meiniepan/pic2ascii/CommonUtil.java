@@ -153,8 +153,11 @@ public class CommonUtil {
     }
 
     public static Bitmap createAsciiPic(final String path, Context context) {
-        final String base = "#8XOHLTI)i=+;:,.";// 字符串由复杂到简单
+//        final String base = "#8XOHLTI)i=+;:,.";// 默认
+        final String base = "BBQROHETI)7ri=+;:,.";// 默认
 //        final String   base = "OUYXcnxr;:,.";// 字符串由复杂到简单
+//        final String   base = "M@WB08Za2SX7r;i:;.";// 字符串由复杂到简单
+//        final String   base = "BBQDEFGHIJKLMNOPQRSTQBWXYZdbcdefghijklmnopqrstuvwxyz.12..5:7..:;,......";// 字符串由复杂到简单
         StringBuilder text = new StringBuilder();
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics dm = new DisplayMetrics();
