@@ -30,7 +30,7 @@ public class MyApplication extends Application {
 
 
         // 安装tinker
-        Beta.installTinker();
+//        Beta.installTinker();installTinker
     }
 
 }
