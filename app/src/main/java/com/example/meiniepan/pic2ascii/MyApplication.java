@@ -2,10 +2,13 @@ package com.example.meiniepan.pic2ascii;
 
 import android.app.Application;
 import android.content.Context;
-import android.support.multidex.MultiDex;
+
+import androidx.multidex.MultiDex;
 
 import com.tencent.bugly.Bugly;
 import com.tencent.bugly.beta.Beta;
+
+import io.microshow.rxffmpeg.RxFFmpegInvoke;
 
 /**
  * @author Burning
@@ -20,6 +23,7 @@ public class MyApplication extends Application {
         // 这里实现SDK初始化，appId替换成你的在Bugly平台申请的appId
         // 调试时，将第三个参数改为true
         Bugly.init(this, "38e029a0d2", true);
+        RxFFmpegInvoke.getInstance().setDebug(true);
     }
 
     @Override

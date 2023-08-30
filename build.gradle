@@ -3,11 +3,20 @@
 buildscript {
     
     repositories {
-        google()
-        jcenter()
+        mavenCentral()
+        maven { url "https://mvn.mob.com/android" }
+        maven { url 'https://developer.huawei.com/repo/'}
+        maven { url 'https://developer.hihonor.com/repo/' }
+        maven { url 'https://artifact.bytedance.com/repository/AwemeOpenSDK' }
+
+        maven { url 'https://maven.aliyun.com/repository/central' }
+        maven { url 'https://maven.aliyun.com/repository/public' }
+        maven { url 'https://maven.aliyun.com/repository/google' }
+
+        maven { url 'https://www.jitpack.io' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.0.0'
+        classpath 'com.android.tools.build:gradle:4.0.1'
         classpath "com.tencent.bugly:tinker-support:1.1.2"
 
         // NOTE: Do not place your application dependencies here; they belong
@@ -17,9 +26,17 @@ buildscript {
 
 allprojects {
     repositories {
-        google()
-        jcenter()
-        maven { url 'https://jitpack.io' }
+        mavenCentral()
+        maven { url "https://mvn.mob.com/android" }
+        maven { url 'https://developer.huawei.com/repo/'}
+        maven { url 'https://developer.hihonor.com/repo/' }
+        maven { url 'https://artifact.bytedance.com/repository/AwemeOpenSDK' }
+
+        maven { url 'https://maven.aliyun.com/repository/central' }
+        maven { url 'https://maven.aliyun.com/repository/public' }
+        maven { url 'https://maven.aliyun.com/repository/google' }
+
+        maven { url 'https://www.jitpack.io' }
     }
 }
 

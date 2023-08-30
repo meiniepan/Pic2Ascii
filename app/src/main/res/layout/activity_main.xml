@@ -7,24 +7,44 @@
     tools:context="com.example.meiniepan.pic2ascii.MainActivity">
 <LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+
+    android:layout_height="50dp">
     <Button
         android:id="@+id/btn_pick"
         android:layout_width="0dp"
         android:layout_weight="1"
-        android:layout_height="50dp"
+        android:layout_height="match_parent"
         android:background="@color/colorPrimary"
         android:onClick="doPick"
         android:text="选择图片(生成黑白)"
         android:textColor="@android:color/white" />
+
     <Button
         android:id="@+id/btn_pick2"
         android:layout_width="0dp"
         android:layout_weight="1"
-        android:layout_height="50dp"
+        android:layout_height="match_parent"
         android:background="@android:color/holo_orange_dark"
         android:onClick="doPick2"
         android:text="选择图片(彩色)"
+        android:textColor="@android:color/white" />
+    <Button
+        android:id="@+id/btn_pick_video"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary"
+        android:onClick="doPickVideo"
+        android:text="选择视频(生成视频)"
+        android:textColor="@android:color/white" />
+    <Button
+        android:id="@+id/btn_pick_gif"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:background="@android:color/holo_orange_dark"
+        android:onClick="doPickGif"
+        android:text="选择视频(生成gif)"
         android:textColor="@android:color/white" />
 </LinearLayout>
 
@@ -56,6 +76,13 @@
         android:layout_gravity="bottom|end"
         android:layout_marginBottom="20dp"
         android:layout_marginEnd="20dp"
+        />
+    <ProgressBar
+        android:id="@+id/pb"
+        android:layout_width="50dp"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:layout_height="50dp"
         />
 </FrameLayout>
 </LinearLayout>

@@ -12,10 +12,8 @@ import android.graphics.Typeface;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.text.Layout;
 import android.text.Spannable;
-import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.StaticLayout;
 import android.text.TextPaint;
@@ -33,7 +31,6 @@ import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -42,8 +39,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * Created by Solang on 2018/8/21.
@@ -94,13 +89,57 @@ public class CommonUtil {
                 .forResult(requestCode);//结果回调onActivityResult code
     }
 
-    private static String generateFileName() {
+    public static void chooseVideo(Activity context, int requestCode) {
+        PictureSelector.create(context)
+                .openGallery(PictureMimeType.ofVideo())//全部.PictureMimeType.ofAll()、图片.ofImage()、视频.ofVideo()、音频.ofAudio()
+//                .theme()//主题样式(不设置为默认样式) 也可参考demo values/styles下 例如：R.style.picture.white.style
+                .maxSelectNum(1)// 最大图片选择数量 int
+//                .minSelectNum()// 最小选择数量 int
+                .imageSpanCount(4)// 每行显示个数 int
+                .selectionMode(PictureConfig.SINGLE)// 多选 or 单选 PictureConfig.MULTIPLE or PictureConfig.SINGLE
+//                .previewImage()// 是否可预览图片 true or false
+//                .previewVideo()// 是否可预览视频 true or false
+//                .enablePreviewAudio() // 是否可播放音频 true or false
+                .isCamera(true)// 是否显示拍照按钮 true or false
+//                .imageFormat(PictureMimeType.PNG)// 拍照保存图片格式后缀,默认jpeg
+                .isZoomAnim(true)// 图片列表点击 缩放效果 默认true
+                .sizeMultiplier(0.5f)// glide 加载图片大小 0~1之间 如设置 .glideOverride()无效
+                .setOutputCameraPath("/CustomPath")// 自定义拍照保存路径,可不填
+                .enableCrop(false)// 是否裁剪 true or false
+                .compress(false)// 是否压缩 true or false
+//                .glideOverride()// int glide 加载宽高，越小图片列表越流畅，但会影响列表图片浏览的清晰度
+                .withAspectRatio(1, 1)// int 裁剪比例 如16:9 3:2 3:4 1:1 可自定义
+//                .hideBottomControls()// 是否显示uCrop工具栏，默认不显示 true or false
+//                .isGif()// 是否显示gif图片 true or false
+                .compressSavePath(context.getFilesDir().getAbsolutePath())//压缩图片保存地址
+                .freeStyleCropEnabled(false)// 裁剪框是否可拖拽 true or false
+                .circleDimmedLayer(true)// 是否圆形裁剪 true or false
+                .showCropFrame(false)// 是否显示裁剪矩形边框 圆形裁剪时建议设为false   true or false
+                .showCropGrid(false)// 是否显示裁剪矩形网格 圆形裁剪时建议设为false    true or false
+                .openClickSound(false)// 是否开启点击声音 true or false
+//                .selectionMedia()// 是否传入已选图片 List<LocalMedia> list
+//                .previewEggs()// 预览图片时 是否增强左右滑动图片体验(图片滑动一半即可看到上一张是否选中) true or false
+                .cropCompressQuality(50)// 裁剪压缩质量 默认90 int
+                .minimumCompressSize(50)// 小于100kb的图片不压缩
+//                .synOrAsy(true)//同步true或异步false 压缩 默认同步
+//                .cropWH()// 裁剪宽高比，设置如果大于图片本身宽高则无效 int
+//                .rotateEnabled() // 裁剪是否可旋转图片 true or false
+                .scaleEnabled(true)// 裁剪是否可放大缩小图片 true or false
+//                .videoQuality()// 视频录制质量 0 or 1 int
+//                .videoMaxSecond(15)// 显示多少秒以内的视频or音频也可适用 int
+//                .videoMinSecond(10)// 显示多少秒以内的视频or音频也可适用 int
+//                .recordVideoSecond()//视频秒数录制 默认60s int
+                .isDragFrame(false)// 是否可拖动裁剪框(固定)
+                .forResult(requestCode);//结果回调onActivityResult code
+    }
+
+    public static String generateFileName() {
         return UUID.randomUUID().toString();
     }
 
     private static final String SD_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator;
 
-    public static void saveBitmap2file(Bitmap bmp,Context context) {
+    public static void saveBitmap2file(Bitmap bmp, Context context) {
         String savePath;
         int a;
         String fileName = generateFileName() + ".JPEG";
@@ -109,7 +148,7 @@ public class CommonUtil {
             savePath = SD_PATH;
         } else {
             Toast.makeText(context, "保存失败！", Toast.LENGTH_SHORT).show();
-            return ;
+            return;
         }
         File filePic = new File(savePath + fileName);
         try {
@@ -134,7 +173,29 @@ public class CommonUtil {
 //            e.printStackTrace();
 //        }
         // 最后通知图库更新
-        context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + savePath+fileName)));
+        context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + savePath + fileName)));
+
+    }
+
+    public static void saveBitmap(Bitmap bmp, Context context, String path) {
+        path = path.replace("bmp", "png");
+        File filePic = new File(path);
+        if (bmp.getHeight() % 2 != 0) {
+            bmp = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight() - 1);
+        }
+        try {
+            if (!filePic.exists()) {
+                filePic.getParentFile().mkdirs();
+                filePic.createNewFile();
+            }
+            FileOutputStream fos = new FileOutputStream(filePic);
+            bmp.compress(Bitmap.CompressFormat.PNG, 30, fos);
+            fos.flush();
+            fos.close();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
     }
 
@@ -155,6 +216,7 @@ public class CommonUtil {
     public static Bitmap createAsciiPic(final String path, Context context) {
 //        final String base = "#8XOHLTI)i=+;:,.";// 默认
         final String base = "BBQROHETI)7ri=+;:,.";// 默认
+//        final String base = "@%#*+=-:. ";// 默认
 //        final String   base = "OUYXcnxr;:,.";// 字符串由复杂到简单
 //        final String   base = "M@WB08Za2SX7r;i:;.";// 字符串由复杂到简单
 //        final String   base = "BBQDEFGHIJKLMNOPQRSTQBWXYZdbcdefghijklmnopqrstuvwxyz.12..5:7..:;,......";// 字符串由复杂到简单
@@ -178,6 +240,49 @@ public class CommonUtil {
             height1 = width1 * height0 / width0;
         }
         image = scale(path, width1, height1);  //读取图片
+        //输出到指定文件中
+        for (int y = 0; y < image.getHeight(); y += 2) {
+            for (int x = 0; x < image.getWidth(); x++) {
+                final int pixel = image.getPixel(x, y);
+                final int r = (pixel & 0xff0000) >> 16, g = (pixel & 0xff00) >> 8, b = pixel & 0xff;
+                final float gray = 0.299f * r + 0.578f * g + 0.114f * b;
+                final int index = Math.round(gray * (base.length() + 1) / 255);
+                String s = index >= base.length() ? " " : String.valueOf(base.charAt(index));
+                text.append(s);
+            }
+            text.append("\n");
+        }
+        return textAsBitmap(text, context);
+//        return creatCodeBitmap(text,context,colors);
+//        return image;
+    }
+
+    public static Bitmap createAsciiPic2(final File path, Context context) {
+//        final String base = "#8XOHLTI)i=+;:,.";// 默认
+        final String base = "BBQROHETI)7ri=+;:,.";// 默认
+//        final String   base = "OUYXcnxr;:,.";// 字符串由复杂到简单
+//        final String   base = "M@WB08Za2SX7r;i:;.";// 字符串由复杂到简单
+//        final String   base = "BBQDEFGHIJKLMNOPQRSTQBWXYZdbcdefghijklmnopqrstuvwxyz.12..5:7..:;,......";// 字符串由复杂到简单
+        StringBuilder text = new StringBuilder();
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics dm = new DisplayMetrics();
+        wm.getDefaultDisplay().getMetrics(dm);
+//        int width = dm.widthPixels;
+        int width = dm.widthPixels;
+        int height = dm.heightPixels;
+        Bitmap image = BitmapFactory.decodeFile(path.getAbsolutePath());//读取图片
+        int width0 = image.getWidth();
+        int height0 = image.getHeight();
+        int width1, height1;
+        int scale = 7;
+        if (width0 <= width / scale) {
+            width1 = width0;
+            height1 = height0;
+        } else {
+            width1 = width / scale;
+            height1 = width1 * height0 / width0;
+        }
+        image = scale2(image, width1, height1);  //读取图片
         //输出到指定文件中
         for (int y = 0; y < image.getHeight(); y += 2) {
             for (int x = 0; x < image.getWidth(); x++) {
@@ -226,13 +331,55 @@ public class CommonUtil {
                 final float gray = 0.299f * r + 0.578f * g + 0.114f * b;
                 final int index = Math.round(gray * (base.length() + 1) / 255);
                 String s = index >= base.length() ? " " : String.valueOf(base.charAt(index));
-                colors.add(pixel) ;
+                colors.add(pixel);
                 text.append(s);
             }
             text.append("\n");
-            colors.add(0) ;
+            colors.add(0);
         }
-        return textAsBitmapColor(text,colors, context);
+        return textAsBitmapColor(text, colors, context);
+//        return creatCodeBitmap(text,context,colors);
+//        return image;
+    }
+
+    public static Bitmap createAsciiPicColor2(final Bitmap path, Context context) {
+        final String base = "#8XOHLTI)i=+;:,.";// 字符串由复杂到简单
+//        final String base = "#,.0123456789:;@ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";// 字符串由复杂到简单
+        StringBuilder text = new StringBuilder();
+        List<Integer> colors = new ArrayList<>();
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics dm = new DisplayMetrics();
+        wm.getDefaultDisplay().getMetrics(dm);
+        int width = dm.widthPixels;
+        int height = dm.heightPixels;
+        Bitmap image = path;  //读取图片
+        int width0 = image.getWidth();
+        int height0 = image.getHeight();
+        int width1, height1;
+        int scale = 7;
+        if (width0 <= width / scale) {
+            width1 = width0;
+            height1 = height0;
+        } else {
+            width1 = width / scale;
+            height1 = width1 * height0 / width0;
+        }
+        image = scale2(path, width1, height1);  //读取图片
+        //输出到指定文件中
+        for (int y = 0; y < image.getHeight(); y += 2) {
+            for (int x = 0; x < image.getWidth(); x++) {
+                final int pixel = image.getPixel(x, y);
+                final int r = (pixel & 0xff0000) >> 16, g = (pixel & 0xff00) >> 8, b = pixel & 0xff;
+                final float gray = 0.299f * r + 0.578f * g + 0.114f * b;
+                final int index = Math.round(gray * (base.length() + 1) / 255);
+                String s = index >= base.length() ? " " : String.valueOf(base.charAt(index));
+                colors.add(pixel);
+                text.append(s);
+            }
+            text.append("\n");
+            colors.add(0);
+        }
+        return textAsBitmapColor(text, colors, context);
 //        return creatCodeBitmap(text,context,colors);
 //        return image;
     }
@@ -248,9 +395,9 @@ public class CommonUtil {
         tv.setLayoutParams(layoutParams);
         SpannableStringBuilder spannableString = new SpannableStringBuilder(contents);
         ForegroundColorSpan colorSpan;
-        for (int i = 0; i <colors.size() ; i++) {
+        for (int i = 0; i < colors.size(); i++) {
             colorSpan = new ForegroundColorSpan(colors.get(i));
-            spannableString.setSpan(colorSpan, i, i+1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spannableString.setSpan(colorSpan, i, i + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
         tv.setText(spannableString);
         tv.setTextSize(scale * 2);
@@ -302,6 +449,7 @@ public class CommonUtil {
         return bitmap;
 
     }
+
     public static Bitmap textAsBitmapColor(StringBuilder text, List<Integer> colors, Context context) {
         TextPaint textPaint = new TextPaint();
         textPaint.setColor(Color.TRANSPARENT);
@@ -314,9 +462,9 @@ public class CommonUtil {
         int width = dm.widthPixels;         //
         SpannableStringBuilder spannableString = new SpannableStringBuilder(text);
         ForegroundColorSpan colorSpan;
-        for (int i = 0; i <colors.size() ; i++) {
+        for (int i = 0; i < colors.size(); i++) {
             colorSpan = new ForegroundColorSpan(colors.get(i));
-            spannableString.setSpan(colorSpan, i, i+1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spannableString.setSpan(colorSpan, i, i + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
         StaticLayout layout = new StaticLayout(spannableString, textPaint, width,
 
@@ -342,6 +490,11 @@ public class CommonUtil {
 
     public static Bitmap scale(String src, int newWidth, int newHeight) {
         Bitmap ret = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(src), newWidth, newHeight, true);
+        return ret;
+    }
+
+    public static Bitmap scale2(Bitmap src, int newWidth, int newHeight) {
+        Bitmap ret = Bitmap.createScaledBitmap(src, newWidth, newHeight, true);
         return ret;
     }
 
