@@ -84,5 +84,17 @@
         android:visibility="gone"
         android:layout_height="50dp"
         />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Powered By BurNing"
+        android:textColor="#0abab5"
+        android:textStyle="italic|bold"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="20dp"
+        android:layout_marginEnd="20dp"
+        />
 </FrameLayout>
 </LinearLayout>

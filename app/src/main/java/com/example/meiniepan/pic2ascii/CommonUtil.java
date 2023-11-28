@@ -45,6 +45,9 @@ import java.util.UUID;
  */
 
 public class CommonUtil {
+    private static String base = "BBQROHETI)7ri=+;:,.";// 默认;
+//    private static String base = "BBQROHETI)7ri=+;:,.          ";// 默认;
+
     public static void choosePhoto(Activity context, int requestCode) {
         PictureSelector.create(context)
                 .openGallery(PictureMimeType.ofImage())//全部.PictureMimeType.ofAll()、图片.ofImage()、视频.ofVideo()、音频.ofAudio()
@@ -215,7 +218,7 @@ public class CommonUtil {
 
     public static Bitmap createAsciiPic(final String path, Context context) {
 //        final String base = "#8XOHLTI)i=+;:,.";// 默认
-        final String base = "BBQROHETI)7ri=+;:,.";// 默认
+
 //        final String base = "@%#*+=-:. ";// 默认
 //        final String   base = "OUYXcnxr;:,.";// 字符串由复杂到简单
 //        final String   base = "M@WB08Za2SX7r;i:;.";// 字符串由复杂到简单
@@ -258,11 +261,6 @@ public class CommonUtil {
     }
 
     public static Bitmap createAsciiPic2(final File path, Context context) {
-//        final String base = "#8XOHLTI)i=+;:,.";// 默认
-        final String base = "BBQROHETI)7ri=+;:,.";// 默认
-//        final String   base = "OUYXcnxr;:,.";// 字符串由复杂到简单
-//        final String   base = "M@WB08Za2SX7r;i:;.";// 字符串由复杂到简单
-//        final String   base = "BBQDEFGHIJKLMNOPQRSTQBWXYZdbcdefghijklmnopqrstuvwxyz.12..5:7..:;,......";// 字符串由复杂到简单
         StringBuilder text = new StringBuilder();
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics dm = new DisplayMetrics();
@@ -301,8 +299,6 @@ public class CommonUtil {
     }
 
     public static Bitmap createAsciiPicColor(final String path, Context context) {
-        final String base = "#8XOHLTI)i=+;:,.";// 字符串由复杂到简单
-//        final String base = "#,.0123456789:;@ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";// 字符串由复杂到简单
         StringBuilder text = new StringBuilder();
         List<Integer> colors = new ArrayList<>();
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
@@ -343,8 +339,6 @@ public class CommonUtil {
     }
 
     public static Bitmap createAsciiPicColor2(final Bitmap path, Context context) {
-        final String base = "#8XOHLTI)i=+;:,.";// 字符串由复杂到简单
-//        final String base = "#,.0123456789:;@ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";// 字符串由复杂到简单
         StringBuilder text = new StringBuilder();
         List<Integer> colors = new ArrayList<>();
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);

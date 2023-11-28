@@ -2,7 +2,12 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/AndroidStudioProjects.Pic2Ascii.iml" filepath="$PROJECT_DIR$/.idea/modules/AndroidStudioProjects.Pic2Ascii.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/Pic2Ascii.iml" filepath="$PROJECT_DIR$/.idea/Pic2Ascii.iml" group="Pic2Ascii" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Pic2Ascii.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Pic2Ascii.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Pic2Ascii.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Pic2Ascii.app.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Pic2Ascii.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Pic2Ascii.app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Pic2Ascii.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Pic2Ascii.app.unitTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="Pic2Ascii/app" />
     </modules>
   </component>
